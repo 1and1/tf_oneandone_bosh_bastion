@@ -4,13 +4,9 @@ Create a Terraform config file. For example, `main.tf`.
 
     module "bosh_bastion" {
       source = "github.com/stackpointcloud/tf_oneandone_bosh_bastion"
-    
+
       private_ssh_key_path = "/path/to/ssh/id_rsa"
       public_ssh_key_path = "/path/to/ssh/id_rsa.pub"
-      bosh_subnet = "192.168.0.0/24"
-      instance_size = "L"
-      datacenter = "US"
-      image = "ubuntu1604-64std"
     }
 
     output "bastion_ip" {
@@ -35,3 +31,22 @@ Initialize and run Terraform:
 * `instance_size` - (Optional) If omitted, `L` is used.
 * `datacenter` - (Optional) If omitted, `US` is used.
 * `image` - (Optional) If omitted, `ubuntu1604-64std` is used.
+
+## Example
+
+The environment configuration can be customized with the available module arguments.
+
+    module "bosh_bastion" {
+      source = "github.com/stackpointcloud/tf_oneandone_bosh_bastion"
+
+      private_ssh_key_path = "/path/to/ssh/id_rsa"
+      public_ssh_key_path = "/path/to/ssh/id_rsa.pub"
+      bosh_subnet = "192.168.0.0/24"
+      instance_size = "L"
+      datacenter = "US"
+      image = "ubuntu1604-64std"
+    }
+
+    output "bastion_ip" {
+      value = "${module.bosh_bastion.bastion_ip}"
+    }
