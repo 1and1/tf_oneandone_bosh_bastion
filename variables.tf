@@ -25,5 +25,5 @@ variable "datacenter" {
 
 variable "image" {
   type    = "string"
-  default = "ubuntu1604-64std"
+  default = "ubuntu1604-64min"
 }

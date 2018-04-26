@@ -94,8 +94,6 @@ resource "null_resource" "private_network" {
 # Bootstrap the bastion server
 # -----------------------------------------------------------------------------
 resource "null_resource" "bootstrap_bastion" {
-  depends_on = [ "oneandone_private_network.bosh_net" ]
-
   connection {
     private_key = "${file(var.private_ssh_key_path)}"
     host        = "${oneandone_server.bastion.ips.0.ip}"
