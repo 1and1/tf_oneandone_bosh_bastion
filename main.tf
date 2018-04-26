@@ -3,23 +3,6 @@ provider "oneandone" {
 }
 
 # -----------------------------------------------------------------------------
-# Bastion internal interface template
-# -----------------------------------------------------------------------------
-data "template_file" "interface" {
-  template = <<EOF
-auto ens224
-    iface ens224 inet static
-        address $${address}
-        netmask $${netmask}
-EOF
-
-  vars {
-    address = "${cidrhost(var.bosh_subnet, 2)}"
-    netmask = "${cidrnetmask(var.bosh_subnet)}"
-  }
-}
-
-# -----------------------------------------------------------------------------
 # Find instance size by name
 # -----------------------------------------------------------------------------
 data "oneandone_instance_size" "name" {
@@ -63,13 +46,8 @@ resource "oneandone_server" "bastion" {
   image               = "${var.image}"
   datacenter          = "${var.datacenter}"
   fixed_instance_size = "${data.oneandone_instance_size.name.id}"
-  ssh_key_public      = "${file("${var.public_ssh_key_path}")}"
+  ssh_key_public      = "${file(var.public_ssh_key_path)}"
   firewall_policy_id  = "${oneandone_firewall_policy.bastion.id}"
-
-  provisioner "file" {
-    content = "${data.template_file.interface.rendered}"
-    destination = "/etc/network/interfaces.d/ens224.cfg"
-  }
 }
 
 # -----------------------------------------------------------------------------
@@ -88,13 +66,38 @@ resource "oneandone_private_network" "bosh_net" {
 }
 
 # -----------------------------------------------------------------------------
+# Initialize the bastion server private network
+# -----------------------------------------------------------------------------
+resource "null_resource" "private_network" {
+  depends_on = [ "oneandone_private_network.bosh_net" ]
+
+  connection {
+    private_key = "${file(var.private_ssh_key_path)}"
+    host        = "${oneandone_server.bastion.ips.0.ip}"
+    user        = "root"
+  }
+
+  provisioner "file" {
+    source = "privatenet.sh"
+    destination = "/tmp/privatenet.sh"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "/bin/bash /tmp/privatenet.sh",
+      "rm -f /tmp/privatenet.sh"
+    ]
+  }
+}
+
+# -----------------------------------------------------------------------------
 # Bootstrap the bastion server
 # -----------------------------------------------------------------------------
 resource "null_resource" "bootstrap_bastion" {
   depends_on = [ "oneandone_private_network.bosh_net" ]
 
   connection {
-    private_key = "${file("${var.private_ssh_key_path}")}"
+    private_key = "${file(var.private_ssh_key_path)}"
     host        = "${oneandone_server.bastion.ips.0.ip}"
     user        = "root"
   }
