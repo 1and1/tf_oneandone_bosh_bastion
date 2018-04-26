@@ -78,7 +78,7 @@ resource "null_resource" "private_network" {
   }
 
   provisioner "file" {
-    source = "privatenet.sh"
+    source = "${path.module}/privatenet.sh"
     destination = "/tmp/privatenet.sh"
   }
 
