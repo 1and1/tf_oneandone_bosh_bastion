@@ -7,3 +7,7 @@ terraform.tfvars
 
 # Module directory
 .terraform/
+
+# Module generated content
+content/stemcell/stemcell.MF
+content/stemcell.tgz
