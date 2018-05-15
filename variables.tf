@@ -2,6 +2,11 @@ variable "api_token" {
   type = "string"
 }
 
+variable "director_name" {
+  type    = "string"
+  default = "bosh"
+}
+
 variable "private_ssh_key_path" {
   type    = "string"
   default = "~/.ssh/id_rsa"
@@ -10,6 +15,11 @@ variable "private_ssh_key_path" {
 variable "public_ssh_key_path" {
   type    = "string"
   default = "~/.ssh/id_rsa.pub"
+}
+
+variable "datacenter" {
+  type    = "string"
+  default = "DE"
 }
 
 variable "bosh_subnet" {
@@ -22,15 +32,6 @@ variable "instance_size" {
   default = "L"
 }
 
-variable "datacenter" {
-  type    = "string"
-  default = "DE"
-}
-
-variable "datacenter_id" {
-  type    = "string"
-}
-
 variable "image" {
   type    = "string"
   default = "ubuntu1604-64min"
@@ -40,7 +41,7 @@ variable "bosh_image_url" {
   default = "https://oneandone-bosh.s3-de-central.profitbricks.com/bosh14.vdi"
 }
 
-variable "director_name" {
+variable "os_id" {
   type    = "string"
-  default = "bosh"
+  default = "B77E19E062D5818532EFF11C747BD104"
 }
