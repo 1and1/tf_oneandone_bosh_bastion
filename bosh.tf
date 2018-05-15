@@ -9,12 +9,11 @@ data "http" "image_sha1" {
 # Import BOSH image
 # -----------------------------------------------------------------------------
 resource "oneandone_image" "bosh" {
-  datacenter_id = "4EFAD5836CE43ACA502FD5B99BEE44EF"
-  name          = "${var.director_name}"
-  server_id     = "123"
-  os_id         = "B77E19E062D5818532EFF11C747BD104"
-  source        = "image"
-  url           = "${var.bosh_image_url}"
+  datacenter = "${var.datacenter}"
+  name       = "${var.director_name}"
+  os_id      = "${var.os_id}"
+  source     = "image"
+  url        = "${var.bosh_image_url}"
 }
 
 # -----------------------------------------------------------------------------
