@@ -101,7 +101,7 @@ resource "null_resource" "bootstrap_bastion" {
        "apt-get update",
        "apt-get -y --no-install-recommends install build-essential ruby ruby-dev libxml2-dev libsqlite3-dev libxslt1-dev libpq-dev libmysqlclient-dev zlib1g-dev git",
        "ssh-keygen -t rsa -N '' -f /root/.ssh/id_rsa",
-       "curl -so /usr/local/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-3.0.1-linux-amd64",
+       "curl -so /usr/local/bin/bosh https://s3.amazonaws.com/bosh-cli-artifacts/bosh-cli-4.0.1-linux-amd64",
        "chmod 755 /usr/local/bin/bosh",
        "git clone --branch oneandone https://github.com/stackpointcloud/bosh-deployment.git /opt/bosh-deployment"
      ]
